@@ -144,7 +144,6 @@ const Main = () => {
             setBoardState={setBoardState}
             doesClickOpen={doesClickOpen}
         />
-        <div></div>
     </div>
 }
 
