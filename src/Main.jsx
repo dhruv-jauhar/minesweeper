@@ -5,9 +5,9 @@ import { initialize, handleClick } from './functions';
 const NewGame = (props) => {
     return <div className="settings">
         {!!props.board.length && <button onClick={()=> props.setShowNewGameSettings(false)}>Back</button>}
-        <input type="text" id="rowno" placeholder="Rows" autoComplete="off"/>
-        <input type="text" id="colno" placeholder="Columns" autoComplete="off"/>
-        <input type="text" id="bombno" placeholder="Mines" autoComplete="off"/>
+        <input type="text" autoFocus id="rowno" placeholder="Enter rows" autoComplete="off"/>
+        <input type="text" id="colno" placeholder="Enter columns" autoComplete="off"/>
+        <input type="text" id="bombno" placeholder="Enter mines" autoComplete="off"/>
         <button onClick={() => {
             let row=document.getElementById("rowno").value
             let mines=document.getElementById("bombno").value
