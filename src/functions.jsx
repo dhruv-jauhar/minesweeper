@@ -84,7 +84,7 @@ export const handleClick = (click, col, row, props) => {
             if (props.boardState[i][j]===2)
                 count++;
     if (count===(props.board.length*props.board[0].length-props.mines)) {
-        props.setMessage("You won!");
+        props.setMessage(`You won!\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0Grid: ${props.board.length}x${props.board.length}\xa0\xa0\xa0\xa0\xa0\xa0Mines: ${props.mines}\xa0\xa0\xa0\xa0\xa0\xa0Time: ${props.time.toFixed(1)}s\xa0\xa0\xa0\xa0\xa0\xa0Hints: 0`);
         props.setRunTime(false)
     }
 }

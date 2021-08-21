@@ -2,7 +2,7 @@ import './index.css';
 import React from "react"
 import { initialize, handleClick } from './functions';
 
-const NewGame = (props) => {
+const NewGame = React.memo((props) => {
     return <div className="settings">
         {!!props.board.length && <button onClick={()=> props.setShowNewGameSettings(false)}>Back</button>}
         <input type="text" autoFocus id="rowno" placeholder="Enter rows" autoComplete="off"/>
@@ -24,32 +24,37 @@ const NewGame = (props) => {
             Start
         </button>
     </div>
-}
+})
 
-// on top: hint, timer, grid size, flag count (on win change to "You won! Grid size, mines, time, hints used.")
+// on top: hint, timer, flag count (on win change to "You won! Grid size, mines, time, hints used.")
 // bottom: reset, toggle, new game, About
 
-const Menu = (props) => {
+const Menu = React.memo((props) => {
     return <div className="settings">
         <button onClick={()=> initialize(props.rows, props.cols, props)}>
-            Reset
+            {`Reset - ${props.rows}x${props.cols}`}
         </button>
-        <button onClick={()=> props.setDoesClickOpen(!props.doesClickOpen)}>
+        {props.message.length?
+        <div className="result">{props.message}</div>
+        : <React.Fragment>
+            <button onClick={()=> props.setDoesClickOpen(!props.doesClickOpen)}>
             <div className={`${props.doesClickOpen}`}>
                 &#128128;
             </div>
             <div className={`${!props.doesClickOpen}`}>
                 &#128681;
             </div>
-        </button>
-        <div className="count">{props.message.length? props.message: <>&#128681;&#8199;&#8199;{props.flagCount}&#8199;/&#8199;{props.mines}</>} </div>
-        <button>Hint</button>
+            </button>
+            <div className="count">{<>&#128681;&#8199;&#8199;{props.flagCount}&#8199;/&#8199;{props.mines}</>}</div>
+            <div className="count">&#9201;&#8199;&#8199;&#8199;&#8199;&#8199;{props.time.toFixed(1)}</div>
+            <button>Hint</button>
+        </React.Fragment>}
         <button onClick={()=> props.setShowNewGameSettings(true)}>New Game</button>
     </div>
-}
+})
 
 
-const Gameboard = (props) => {
+const Gameboard = React.memo((props) => {
     React.useEffect(() =>
     [...document.querySelectorAll(".tile")].forEach(
         el => el.addEventListener('contextmenu', e => {
@@ -83,7 +88,7 @@ const Gameboard = (props) => {
             </div>
         })}
     </div>
-}
+})
 
 const Main = () => {
     const [time, setTime] = React.useState(0)
@@ -140,6 +145,7 @@ const Main = () => {
         :   <Menu       
             rows={rows}
             cols={cols}
+            time={time}
             mines={mines}
             board={board}
             setTime={setTime}
@@ -170,8 +176,7 @@ const Main = () => {
             setBoardState={setBoardState}
             doesClickOpen={doesClickOpen}
         />
-        <div className="count">&#9201;&#8199;&#8199;&#8199;&#8199;&#8199;{time.toFixed(1)}</div>
     </div>
 }
 
-export default Main
+export default React.memo(Main)
