@@ -98,6 +98,15 @@ const Main = () => {
     const [doesClickOpen, setDoesClickOpen] = React.useState(true)
     const [showNewGameSettings, setShowNewGameSettings] = React.useState(true)
 
+    document.addEventListener('visibilitychange', function() {
+        if(document.hidden) {
+            setRunTime(false)
+        }
+        else {
+            setRunTime(true)
+        }
+    });
+
     React.useEffect(() => { 
         let interval = null;
         if (runTime) {
