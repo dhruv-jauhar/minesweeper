@@ -18,6 +18,7 @@ export const openSurrounding = (col, row, props) => {
 
 export const gameOver = (props) => {
     props.setMessage("You lose!")
+    props.setRunTime(false)
     let temp=props.boardState;
     for (var i=0; i<props.board.length; i++) 
         for (var j=0; j<props.board[0].length; j++)
@@ -43,7 +44,6 @@ export const openBox = (col, row, props) => {
     if (props.board[col][row]==='X')
         gameOver(props);
     props.setBoardState(temp)
-    props.setA(props.a+1)
 }
 export const flag = (col, row, props) => {
     let temp=props.boardState;
@@ -58,14 +58,15 @@ export const flag = (col, row, props) => {
         props.setFlagCount(props.flagCount-1)
     }
     props.setBoardState(temp)
-    return;
 }
 
 export const handleClick = (click, col, row, props) => {
-    if (props.boardState[col][row]===0 && click==='l' && props.a===0){
+    if (props.boardState[col][row]===0 && click==='l' && props.runTime===false){
         addMines(col,row,props)
-        props.setA(props.a+1)
+        props.setRunTime(true)
     }
+    if (props.message.length)
+        return
     switch (props.boardState[col][row]) {
         case 0: click==='l'?openBox(col,row, props):flag(col,row, props);
                 break;
@@ -82,8 +83,10 @@ export const handleClick = (click, col, row, props) => {
         for (var j=0; j<props.board[0].length; j++)
             if (props.boardState[i][j]===2)
                 count++;
-    if (count===(props.board.length*props.board[0].length-props.mines))
-        props.setMessage("You won!")
+    if (count===(props.board.length*props.board[0].length-props.mines)) {
+        props.setMessage("You won!");
+        props.setRunTime(false)
+    }
 }
 
 export const addMines  = (col, row, props) => {
@@ -91,7 +94,6 @@ export const addMines  = (col, row, props) => {
     let rows=props.board[0].length
     let columns=props.board.length
     let board=props.board
-    console.log(rows, columns, mines)
     for (var i = 0; i < Math.min(mines, rows*columns); i++) {
         let bomb = Math.floor(Math.random() * columns * rows)
         while (board[bomb % columns][Math.floor(bomb / columns)] === "X" || (Math.abs((bomb % columns)-col)<2 && Math.abs((Math.floor(bomb / columns))-row)<2) )
@@ -122,13 +124,13 @@ export function zeros(dimensions) {
     return array;
 }
 
-export function initialize (rows, cols, setBoard, setBoardState, setMessage,
-    setFlagCount, setA, curRows, curCols) {
-    rows=rows|| curRows || 10
-    cols=cols|| curCols || 10
-    setBoard(zeros([cols, rows]))
-    setBoardState(zeros([cols, rows]))
-    setMessage("")
-    setFlagCount(0)
-    setA(0)
+export function initialize (rows, cols, props) {
+    rows=rows|| props.rows || 10
+    cols=cols|| props.cols || 10
+    props.setBoard(zeros([cols, rows]))
+    props.setBoardState(zeros([cols, rows]))
+    props.setMessage("")
+    props.setFlagCount(0)
+    props.setTime(0)
+    props.setRunTime(false)
 }

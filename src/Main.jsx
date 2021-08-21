@@ -18,8 +18,7 @@ const NewGame = (props) => {
             props.setRows(row || props.rows || 10)
             props.setMines(mines || props.mines || 15)
             props.setCols(cols || props.cols || 10)
-            initialize(row, cols, props.setBoard, props.setBoardState, props.setMessage,
-                props.setFlagCount, props.setA, props.rows, props.cols)
+            initialize(row, cols, props)
             props.setShowNewGameSettings(false)
         }}>
             Start
@@ -27,10 +26,12 @@ const NewGame = (props) => {
     </div>
 }
 
+// on top: hint, timer, grid size, flag count (on win change to "You won! Grid size, mines, time, hints used.")
+// bottom: reset, toggle, new game, About
+
 const Menu = (props) => {
     return <div className="settings">
-        <button onClick={()=> initialize(props.rows, props.cols, props.setBoard, props.setBoardState, props.setMessage,
-        props.setFlagCount, props.setA, 0, 0)}>
+        <button onClick={()=> initialize(props.rows, props.cols, props)}>
             Reset
         </button>
         <button onClick={()=> props.setDoesClickOpen(!props.doesClickOpen)}>
@@ -85,29 +86,46 @@ const Gameboard = (props) => {
 }
 
 const Main = () => {
-    const [a, setA] = React.useState(0) //random variable to re-render page. REWRITE
+    const [time, setTime] = React.useState(0)
     const [rows, setRows] = React.useState(0)
     const [cols, setCols] = React.useState(0)
     const [mines, setMines] = React.useState(0)
     const [board, setBoard] = React.useState([])
+    const [runTime, setRunTime] = React.useState(false)
     const [message, setMessage] = React.useState("")
     const [flagCount, setFlagCount] = React.useState(0)
     const [boardState, setBoardState] = React.useState([])
     const [doesClickOpen, setDoesClickOpen] = React.useState(true)
     const [showNewGameSettings, setShowNewGameSettings] = React.useState(true)
 
+    React.useEffect(() => { 
+        let interval = null;
+        if (runTime) {
+            interval = setInterval(() => {
+                setTime((time) => time + 0.1);
+        }, 100);
+        }
+        else {
+            clearInterval(interval);
+          }
+          return () => {
+            clearInterval(interval);
+          };
+      }, [runTime]);
+
     return <div className="screen">
         {showNewGameSettings
         ?   <NewGame
             rows={rows}
             cols={cols}
-            setA={setA}
             mines={mines}    
             board={board}
             setRows={setRows}
             setCols={setCols}
+            setTime={setTime}
             setMines={setMines}
             setBoard={setBoard}
+            setRunTime={setRunTime}
             setMessage={setMessage}
             setFlagCount={setFlagCount}
             setBoardState={setBoardState}
@@ -117,12 +135,13 @@ const Main = () => {
         :   <Menu       
             rows={rows}
             cols={cols}
-            setA={setA}
             mines={mines}
             board={board}
+            setTime={setTime}
             message={message}
             setBoard={setBoard}
             flagCount={flagCount}
+            setRunTime={setRunTime}
             setMessage={setMessage}
             setFlagCount={setFlagCount}
             doesClickOpen={doesClickOpen}
@@ -132,18 +151,20 @@ const Main = () => {
             />
         }
         <Gameboard
-            a={a}
-            setA={setA}
             mines={mines}
             board={board}
+            runTime={runTime}
+            message={message}
             setBoard={setBoard}
             flagCount={flagCount}
+            setRunTime={setRunTime}
             boardState={boardState}
             setMessage={setMessage}
             setFlagCount={setFlagCount}
             setBoardState={setBoardState}
             doesClickOpen={doesClickOpen}
         />
+        <div className="count">&#9201;&#8199;&#8199;&#8199;&#8199;&#8199;{time.toFixed(1)}</div>
     </div>
 }
 
