@@ -103,7 +103,7 @@ const Main = () => {
             setRunTime(false)
         }
         else {
-            setRunTime(true)
+            setRunTime(!!(time>0 && message.length===0))
         }
     });
 
@@ -112,14 +112,10 @@ const Main = () => {
         if (runTime) {
             interval = setInterval(() => {
                 setTime((time) => time + 0.1);
-        }, 100);
+            }, 100);
         }
-        else {
-            clearInterval(interval);
-          }
-          return () => {
-            clearInterval(interval);
-          };
+        else {clearInterval(interval)}
+        return () => {clearInterval(interval)};
       }, [runTime]);
 
     return <div className="screen">
@@ -160,6 +156,7 @@ const Main = () => {
             />
         }
         <Gameboard
+            time={time}
             mines={mines}
             board={board}
             runTime={runTime}

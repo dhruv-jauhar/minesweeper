@@ -61,7 +61,7 @@ export const flag = (col, row, props) => {
 }
 
 export const handleClick = (click, col, row, props) => {
-    if (props.boardState[col][row]===0 && click==='l' && props.runTime===false){
+    if (props.boardState[col][row]===0 && click==='l' && props.runTime===false && props.time===0){
         addMines(col,row,props)
         props.setRunTime(true)
     }
@@ -131,6 +131,6 @@ export function initialize (rows, cols, props) {
     props.setBoardState(zeros([cols, rows]))
     props.setMessage("")
     props.setFlagCount(0)
-    props.setTime(0)
     props.setRunTime(false)
+    setTimeout(()=> props.setTime(0), 150)
 }
