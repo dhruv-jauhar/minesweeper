@@ -3,16 +3,27 @@ import React from "react"
 import { initialize, handleClick } from './functions';
 
 const NewGame = React.memo((props) => {
+    const [showCustom, setShowCustom] = React.useState(true)
+
+    const setValues = (rows,cols,mines) => {
+        props.setRows(rows)
+        props.setCols(cols)
+        props.setMines(mines)
+        initialize(rows, cols, props)
+    }
     return <div className="settings">
         {!!props.board.length && <button onClick={()=> props.setShowNewGameSettings(false)}>Back</button>}
-        <input type="text" autoFocus id="rowno" placeholder="Enter rows" autoComplete="off"/>
-        <input type="text" id="colno" placeholder="Enter columns" autoComplete="off"/>
-        <input type="text" id="bombno" placeholder="Enter mines" autoComplete="off"/>
-        <button onClick={() => {
+        <button onClick={()=>setShowCustom(!showCustom)}>{showCustom?"Presets":"Custom"}</button>
+        {showCustom?
+        <React.Fragment>
+            <input type="text" autoFocus id="rowno" placeholder="Enter rows" autoComplete="off"/>
+            <input type="text" id="colno" placeholder="Enter columns" autoComplete="off"/>
+            <input type="text" id="bombno" placeholder="Enter mines" autoComplete="off"/> 
+            <button onClick={() => {
             let row=document.getElementById("rowno").value
             let mines=document.getElementById("bombno").value
             let cols=document.getElementById("colno").value
-            if (row>20) {
+            if (row>24) {
                 window.alert("Please limit rows to 20")
                 return;
             }
@@ -35,11 +46,32 @@ const NewGame = React.memo((props) => {
         }}>
             Start
         </button>
+        </React.Fragment>
+        : <React.Fragment>
+            <button onClick={()=> {
+                setShowCustom(true);
+                props.setShowNewGameSettings(false)
+                setValues(8,8,10)
+            }}>Easy - 8x8, 10</button>
+            <button onClick={()=> {
+                setShowCustom(!showCustom);
+                props.setShowNewGameSettings(false)
+                setValues(16,16,40)
+            }}>Medium - 16x16, 40</button>
+            <button onClick={()=> {
+                setShowCustom(!showCustom);
+                props.setShowNewGameSettings(false)
+                setValues(30,16,99)
+            }}>Hard - 30x16, 99</button>
+            <button onClick={()=> {
+                setShowCustom(!showCustom);
+                props.setShowNewGameSettings(false)
+                setValues(30,24,200)
+            }}>Expert - 30x24, 200</button>
+        </React.Fragment>
+        }  
     </div>
 })
-
-// on top: hint, timer, flag count (on win change to "You won! Grid size, mines, time, hints used.")
-// bottom: reset, toggle, new game, About
 
 const Menu = React.memo((props) => {
     return <div className="settings">
@@ -134,6 +166,11 @@ const Main = () => {
         else {clearInterval(interval)}
         return () => {clearInterval(interval)};
       }, [runTime]);
+
+      React.useEffect(()=>{
+        if (message.length)
+            setShowNewGameSettings(false)
+      }, [message])
 
     return <div className="screen">
         {showNewGameSettings
