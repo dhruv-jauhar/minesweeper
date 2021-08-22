@@ -12,6 +12,18 @@ const NewGame = React.memo((props) => {
             let row=document.getElementById("rowno").value
             let mines=document.getElementById("bombno").value
             let cols=document.getElementById("colno").value
+            if (row>20) {
+                window.alert("Please limit rows to 20")
+                return;
+            }
+            if (cols>32) {
+                window.alert("Please limit columns to 32")
+                return;
+            }
+            if (2.5*mines>row*cols) {
+                window.alert("Please limit mines to 40% of the board")
+                return;
+            }
             row.length? row=parseInt(row): row=0
             cols.length? cols=parseInt(cols): cols=0
             mines.length? mines=parseInt(mines): mines=0
