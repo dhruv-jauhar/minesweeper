@@ -24,7 +24,7 @@ const NewGame = React.memo((props) => {
             let mines=document.getElementById("bombno").value
             let cols=document.getElementById("colno").value
             if (row>24) {
-                window.alert("Please limit rows to 20")
+                window.alert("Please limit rows to 24")
                 return;
             }
             if (cols>32) {
