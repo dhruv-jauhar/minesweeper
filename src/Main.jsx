@@ -1,6 +1,6 @@
 import './index.css';
 import React from "react"
-import { initialize, handleClick } from './functions';
+import { initialize, handleClick, hint, solve } from './functions';
 
 const NewGame = React.memo((props) => {
     const [showCustom, setShowCustom] = React.useState(true)
@@ -91,7 +91,8 @@ const Menu = React.memo((props) => {
             </button>
             <div className="count">{<>&#128681;&#8199;&#8199;{props.flagCount}&#8199;/&#8199;{props.mines}</>}</div>
             <div className="count">&#9201;&#8199;&#8199;&#8199;&#8199;&#8199;{props.time.toFixed(1)}</div>
-            <button>Hint</button>
+            <button onClick={()=> hint(props)}>Hint</button>
+            <button onClick={()=> solve(props)}>Solve</button>
         </React.Fragment>}
         <button onClick={()=> props.setShowNewGameSettings(true)}>New Game</button>
     </div>
@@ -114,7 +115,9 @@ const Gameboard = React.memo((props) => {
                         className={
                             props.boardState[colNo][rowNo]===2
                             ? `a${props.board[colNo][rowNo]}`
-                            : "tile"
+                            : (props.hintState[colNo][rowNo]===0)
+                                ? "tile"
+                                : `b${props.hintState[colNo][rowNo]}`
                         }
                         onClick={()=>handleClick(props.doesClickOpen?'l':'r', colNo, rowNo, props)}
                         onContextMenu={()=>{
@@ -143,6 +146,7 @@ const Main = () => {
     const [runTime, setRunTime] = React.useState(false)
     const [message, setMessage] = React.useState("")
     const [flagCount, setFlagCount] = React.useState(0)
+    const [hintState, setHintState] = React.useState([])
     const [boardState, setBoardState] = React.useState([])
     const [doesClickOpen, setDoesClickOpen] = React.useState(true)
     const [showNewGameSettings, setShowNewGameSettings] = React.useState(true)
@@ -187,6 +191,7 @@ const Main = () => {
             setRunTime={setRunTime}
             setMessage={setMessage}
             setFlagCount={setFlagCount}
+            setHintState={setHintState}
             setBoardState={setBoardState}
             setShowNewGameSettings={setShowNewGameSettings}
             />
@@ -201,10 +206,13 @@ const Main = () => {
             message={message}
             setBoard={setBoard}
             flagCount={flagCount}
+            hintState={hintState}
+            boardState={boardState}
             setRunTime={setRunTime}
             setMessage={setMessage}
             setFlagCount={setFlagCount}
             doesClickOpen={doesClickOpen}
+            setHintState={setHintState}
             setBoardState={setBoardState}
             setDoesClickOpen={setDoesClickOpen}
             setShowNewGameSettings={setShowNewGameSettings}
@@ -218,10 +226,12 @@ const Main = () => {
             message={message}
             setBoard={setBoard}
             flagCount={flagCount}
+            hintState={hintState}
             setRunTime={setRunTime}
             boardState={boardState}
             setMessage={setMessage}
             setFlagCount={setFlagCount}
+            setHintState={setHintState}
             setBoardState={setBoardState}
             doesClickOpen={doesClickOpen}
         />

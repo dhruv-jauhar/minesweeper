@@ -41,9 +41,21 @@ export const openBox = (col, row, props) => {
             }
         }
     }
+    let temp1=props.hintState
+    temp1[col][row]=0
+    props.setHintState(temp1)
     if (props.board[col][row]==='X')
         gameOver(props);
     props.setBoardState(temp)
+    let count=0
+    for (var i=0; i<props.board.length; i++) 
+        for (var j=0; j<props.board[0].length; j++)
+            if (temp[i][j]===2)
+                count++;
+    if (count===(props.board.length*props.board[0].length-props.mines)) {
+        props.setMessage(`You won!\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0Grid: ${props.board.length}x${props.board.length}\xa0\xa0\xa0\xa0\xa0\xa0Mines: ${props.mines}\xa0\xa0\xa0\xa0\xa0\xa0Time: ${props.time.toFixed(1)}s\xa0\xa0\xa0\xa0\xa0\xa0Hints: 0`);
+        props.setRunTime(false)
+    }
 }
 export const flag = (col, row, props) => {
     let temp=props.boardState;
@@ -57,6 +69,9 @@ export const flag = (col, row, props) => {
         temp[col][row]=0;
         props.setFlagCount(props.flagCount-1)
     }
+    let temp1=props.hintState
+    temp1[col][row]=0
+    props.setHintState(temp1)
     props.setBoardState(temp)
 }
 
@@ -75,17 +90,6 @@ export const handleClick = (click, col, row, props) => {
         case 2: openSurrounding(col,row, props);
                 break;
         default: return;
-    }
-    if (!props.boardState[col][row]===0 || !click==='l')
-        return;
-    let count=0
-    for (var i=0; i<props.board.length; i++) 
-        for (var j=0; j<props.board[0].length; j++)
-            if (props.boardState[i][j]===2)
-                count++;
-    if (count===(props.board.length*props.board[0].length-props.mines)) {
-        props.setMessage(`You won!\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0Grid: ${props.board.length}x${props.board.length}\xa0\xa0\xa0\xa0\xa0\xa0Mines: ${props.mines}\xa0\xa0\xa0\xa0\xa0\xa0Time: ${props.time.toFixed(1)}s\xa0\xa0\xa0\xa0\xa0\xa0Hints: 0`);
-        props.setRunTime(false)
     }
 }
 
@@ -129,8 +133,77 @@ export function initialize (rows, cols, props) {
     cols=cols|| props.cols || 10
     props.setBoard(zeros([cols, rows]))
     props.setBoardState(zeros([cols, rows]))
+    props.setHintState(zeros([cols, rows]))
     props.setMessage("")
     props.setFlagCount(0)
     props.setRunTime(false)
     setTimeout(()=> props.setTime(0), 150)
+}
+
+export function hint (props) {
+    if (props.time===0)
+        return;
+    let flag=0;
+    let temp=props.hintState;
+    for (var i=0; i<props.board.length; i++) {
+        for (var j=0; j<props.board[0].length; j++) {
+            if (props.boardState[i][j]===1 && props.board[i][j]!='X') {
+                temp[i][j]=2;
+                flag=1;
+            }
+        }
+    }
+    if (flag)
+        return;
+    for (var col=0; col<props.board.length; col++) {
+        for (var row=0; row<props.board[0].length; row++) {
+            if (props.boardState[col][row]===2) {
+                let moves = [-1, 0, 1]
+                let flagged=0
+                let closed=0;
+                for (var a = 0; a < 3; a++) {
+                    for (var b = 0; b < 3; b++) {
+                        if (col + moves[a] >= 0 && col + moves[a] < props.board.length && row + moves[b] >= 0 && row + moves[b] < props.board[0].length) {
+                            if (props.boardState[col+moves[a]][row+moves[b]]===1) flagged++;
+                            if (props.boardState[col+moves[a]][row+moves[b]]===0) closed++;
+                        }                            
+                    }
+                }
+                if (flagged===props.board[col][row])
+                for (a = 0; a < 3; a++) {
+                    for (b = 0; b < 3; b++) {
+                        if (col + moves[a] >= 0 && col + moves[a] < props.board.length && row + moves[b] >= 0 && row + moves[b] < props.board[0].length && props.boardState[col+moves[a]][row+moves[b]]===0)
+                            temp[col+moves[a]][row+moves[b]]=1;
+                    }
+                }
+                if (closed===props.board[col][row]-flagged)
+                for (a = 0; a < 3; a++) {
+                    for (b = 0; b < 3; b++) {
+                        if (col + moves[a] >= 0 && col + moves[a] < props.board.length && row + moves[b] >= 0 && row + moves[b] < props.board[0].length && props.boardState[col+moves[a]][row+moves[b]]===0)
+                            temp[col+moves[a]][row+moves[b]]=2;
+                    }
+                }
+            }
+        }
+    }
+    props.setHintState(temp)
+}
+
+export function solve (props) {
+    hint (props)
+    setTimeout(()=>{
+        let chk=0;
+        for (var col=0; col<props.board.length; col++) {
+            for (var row=0; row<props.board[0].length; row++) {
+                if (props.hintState[col][row]!==0)
+                    chk=1;
+                if (props.hintState[col][row]===1)
+                    openBox(col, row, props)
+                if (props.hintState[col][row]===2)
+                    flag(col, row, props)
+            }
+        }
+        if (chk===1)
+            setTimeout(()=>solve(props), 1000)
+    }, 1000)
 }
