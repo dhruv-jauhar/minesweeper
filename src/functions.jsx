@@ -186,6 +186,21 @@ export function hint (props) {
             }
         }
     }
+    let count=0;
+    for (var col=0; col<props.board.length; col++) {
+        for (var row=0; row<props.board[0].length; row++) {
+            if (props.boardState[col][row]===1)
+                count++;
+        }
+    }
+    if (count===props.mines && props.message.length===0) {
+        for (var col=0; col<props.board.length; col++) {
+            for (var row=0; row<props.board[0].length; row++) {
+                if (props.boardState[col][row]===0)
+                    temp[col][row]=1;
+            }
+        }
+    }
     props.setHintState(temp)
 }
 
@@ -204,6 +219,8 @@ export function solve (props) {
             }
         }
         if (chk===1)
-            setTimeout(()=>solve(props), 1000)
+            setTimeout(()=>
+            solve(props)
+            , 1000)
     }, 1000)
 }

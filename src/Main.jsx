@@ -109,9 +109,9 @@ const Gameboard = React.memo((props) => {
     ))
     return <div className="gameboard">
         {props.board.map((row, colNo) => {
-            return <div className="row">
+            return <div className="row" key={colNo}>
                 {row.map((tile, rowNo) => {
-                    return <div 
+                    return <div key={rowNo}
                         className={
                             props.boardState[colNo][rowNo]===2
                             ? `a${props.board[colNo][rowNo]}`
