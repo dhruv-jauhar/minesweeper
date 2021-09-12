@@ -147,6 +147,7 @@ const Main = () => {
     const [message, setMessage] = React.useState("")
     const [flagCount, setFlagCount] = React.useState(0)
     const [hintState, setHintState] = React.useState([])
+    const [hintCount, setHintCount] = React.useState(0)
     const [boardState, setBoardState] = React.useState([])
     const [doesClickOpen, setDoesClickOpen] = React.useState(true)
     const [showNewGameSettings, setShowNewGameSettings] = React.useState(true)
@@ -187,10 +188,12 @@ const Main = () => {
             setCols={setCols}
             setTime={setTime}
             setMines={setMines}
+            hintCount={hintCount}
             setBoard={setBoard}
             setRunTime={setRunTime}
             setMessage={setMessage}
             setFlagCount={setFlagCount}
+            setHintCount={setHintCount}
             setHintState={setHintState}
             setBoardState={setBoardState}
             setShowNewGameSettings={setShowNewGameSettings}
@@ -209,9 +212,11 @@ const Main = () => {
             hintState={hintState}
             boardState={boardState}
             setRunTime={setRunTime}
+            hintCount={hintCount}
             setMessage={setMessage}
             setFlagCount={setFlagCount}
             doesClickOpen={doesClickOpen}
+            setHintCount={setHintCount}
             setHintState={setHintState}
             setBoardState={setBoardState}
             setDoesClickOpen={setDoesClickOpen}
@@ -224,12 +229,14 @@ const Main = () => {
             board={board}
             runTime={runTime}
             message={message}
+            hintCount={hintCount}
             setBoard={setBoard}
             flagCount={flagCount}
             hintState={hintState}
             setRunTime={setRunTime}
             boardState={boardState}
             setMessage={setMessage}
+            setHintCount={setHintCount}
             setFlagCount={setFlagCount}
             setHintState={setHintState}
             setBoardState={setBoardState}

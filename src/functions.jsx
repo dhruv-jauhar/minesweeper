@@ -45,7 +45,7 @@ export const openBox = (col, row, props) => {
             if (temp[i][j]===2)
                 count++;
     if (count===(props.board.length*props.board[0].length-props.mines)) {
-        props.setMessage(`You won!\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0Grid: ${props.board.length}x${props.board.length}\xa0\xa0\xa0\xa0\xa0\xa0Mines: ${props.mines}\xa0\xa0\xa0\xa0\xa0\xa0Time: ${props.time.toFixed(1)}s\xa0\xa0\xa0\xa0\xa0\xa0Hints: 0`);
+        props.setMessage(`You won!\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0Grid: ${props.board.length}x${props.board.length}\xa0\xa0\xa0\xa0\xa0\xa0Mines: ${props.mines}\xa0\xa0\xa0\xa0\xa0\xa0Time: ${props.time.toFixed(1)}s\xa0\xa0\xa0\xa0\xa0\xa0Hints Used: ${props.hintCount}`);
         props.setRunTime(false)
     }
 }
@@ -217,6 +217,7 @@ export function initialize (rows, cols, props) {
     props.setMessage("")
     props.setFlagCount(0)
     props.setRunTime(false)
+    props.setHintCount(0)
     setTimeout(()=> props.setTime(0), 150)
 }
 
@@ -281,7 +282,7 @@ export function hint (props) {
             }
         }
     }
-    //if temp=hintState, run AI. separate function
+    props.setHintCount(props.hintCount+1)
     props.setHintState(temp)
 }
 
