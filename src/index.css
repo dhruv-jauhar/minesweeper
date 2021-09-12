@@ -97,6 +97,10 @@ button {
 
 }
 
+button:hover{
+  background-color: #333333;
+}
+
 button:active {
   background-color: #000000;
   font-size: 13px;

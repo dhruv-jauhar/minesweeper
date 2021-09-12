@@ -92,7 +92,7 @@ const Menu = React.memo((props) => {
             <div className="count">{<>&#128681;&#8199;&#8199;{props.flagCount}&#8199;/&#8199;{props.mines}</>}</div>
             <div className="count">&#9201;&#8199;&#8199;&#8199;&#8199;&#8199;{props.time.toFixed(1)}</div>
             <button onClick={()=> hint(props)}>Hint</button>
-            <button onClick={()=> solve(props)}>Solve</button>
+            {/* <button onClick={()=> solve(props)}>Solve</button> */}
         </React.Fragment>}
         <button onClick={()=> props.setShowNewGameSettings(true)}>New Game</button>
     </div>
