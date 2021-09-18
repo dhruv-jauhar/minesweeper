@@ -12,23 +12,23 @@ const NewGame = React.memo((props) => {
         initialize(rows, cols, props)
     }
     return <div className="settings">
-        {!!props.board.length && <button onClick={()=> props.setShowNewGameSettings(false)}>Back</button>}
+        {!!props.board.length && <button className="red" onClick={()=> props.setShowNewGameSettings(false)}>Back</button>}
         <button onClick={()=>setShowCustom(!showCustom)}>{showCustom?"Presets":"Custom"}</button>
         {showCustom?
         <React.Fragment>
             <input type="text" autoFocus id="rowno" placeholder="Enter rows" autoComplete="off"/>
             <input type="text" id="colno" placeholder="Enter columns" autoComplete="off"/>
             <input type="text" id="bombno" placeholder="Enter mines" autoComplete="off"/> 
-            <button onClick={() => {
+            <button className="green" onClick={() => {
             let row=document.getElementById("rowno").value
             let mines=document.getElementById("bombno").value
             let cols=document.getElementById("colno").value
-            if (row>24) {
-                window.alert("Please limit rows to 24")
+            if (row>32) {
+                window.alert("Please limit rows to 32")
                 return;
             }
-            if (cols>32) {
-                window.alert("Please limit columns to 32")
+            if (cols>24) {
+                window.alert("Please limit columns to 24")
                 return;
             }
             if (2.5*mines>row*cols) {
@@ -75,7 +75,7 @@ const NewGame = React.memo((props) => {
 
 const Menu = React.memo((props) => {
     return <div className="settings">
-        <button onClick={()=> initialize(props.rows, props.cols, props)}>
+        <button className="red" onClick={()=> initialize(props.rows, props.cols, props)}>
             {`Reset - ${props.rows}x${props.cols}`}
         </button>
         {props.message.length?
@@ -94,7 +94,7 @@ const Menu = React.memo((props) => {
             <button onClick={()=> hint(props)}>Hint</button>
             {/* <button onClick={()=> solve(props)}>Solve</button> */}
         </React.Fragment>}
-        <button onClick={()=> props.setShowNewGameSettings(true)}>New Game</button>
+        <button className="green" onClick={()=> props.setShowNewGameSettings(true)}>New Game</button>
     </div>
 })
 
@@ -149,6 +149,7 @@ const Main = () => {
     const [hintState, setHintState] = React.useState([])
     const [hintCount, setHintCount] = React.useState(0)
     const [boardState, setBoardState] = React.useState([])
+    const [isHovering, setIsHovering] = React.useState(false)
     const [doesClickOpen, setDoesClickOpen] = React.useState(true)
     const [showNewGameSettings, setShowNewGameSettings] = React.useState(true)
 
@@ -242,6 +243,19 @@ const Main = () => {
             setBoardState={setBoardState}
             doesClickOpen={doesClickOpen}
         />
+        {isHovering && <div className="moreinfo">
+            Welcome to the last minesweeper you'll ever need! <br/><br/>
+            Using Artificial Intelligence, this game creates a random board that is guaranteed to be solvable,
+            so you'll never lose a game because of a 50-50 guess.<br/><br/>
+            You can customize the game dimensions to your liking or use the international standard presets.
+            The default is 10x10 with 15 mines. Remember: if you add too many mines, the AI might not find a solvable board.<br/><br/>
+            Left click to open a box or right click to flag it. You may toggle this by clicking on the button on top.<br/><br/>
+            Clicking on an open box will open all surrounding boxes if all the mines of the original box have been flagged.<br/><br/>
+            The hint button will let you know if you've wrongly flagged any box, and if there's any unopened box that can be deduced to be either safe or have a mine.
+
+
+        </div>}
+        <button className="info" onMouseOver={()=>setIsHovering(true)} onMouseLeave={()=>setIsHovering(false)}>&#9432;</button>
     </div>
 }
 
