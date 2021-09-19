@@ -3,7 +3,7 @@ import React from "react"
 import { initialize, handleClick, hint, solve, transposeAll } from './functions';
 
 const NewGame = React.memo((props) => {
-    const [showCustom, setShowCustom] = React.useState(true)
+    const [showCustom, setShowCustom] = React.useState(false)
 
     const setValues = (rows,cols,mines) => {
         props.setRows(rows)
@@ -247,7 +247,7 @@ const Main = () => {
             Left click to open a box or right click to flag it. You may toggle this by clicking on the button on top.<br/><br/>
             Clicking on an open box will open all surrounding boxes if all the mines of the original box have been flagged.<br/><br/>
             The hint button will let you know if you've wrongly flagged any box, and if there's any unopened box that can be deduced to be either safe or have a mine.
-            <br/><br/> On the bottom right, you can change the board from vertical to horizontal based on your orientation.
+            <br/><br/> On the bottom right, you can change the board from vertical to horizontal (and vice-versa) based on your orientation.
 
         </div>}
         <button className="info" onMouseOver={()=>setIsHovering(true)} onMouseLeave={()=>setIsHovering(false)}>&#9432;</button>

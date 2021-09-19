@@ -91,7 +91,7 @@ div.moreinfo {
   font-weight: 100;
   font-size: 13px;
   text-align: justify;
-  position: absolute;
+  position: fixed;
   padding: 1rem;
   bottom: 2rem;
   left: 2rem;
@@ -126,7 +126,7 @@ button.info {
   background-color: black;
   font-size: 36px;
   box-shadow: 0 0 0 0;
-  position:absolute;
+  position:fixed;
   bottom: 1rem;
   left: 1rem;
 }
@@ -137,7 +137,7 @@ button.transpose {
   background-color: black;
   font-size: 36px;
   box-shadow: 0 0 0 0;
-  position:absolute;
+  position:fixed;
   bottom: 1rem;
   right: 1rem;
 }
