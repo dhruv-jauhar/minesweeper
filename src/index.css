@@ -167,7 +167,13 @@ button:active {
 }
 
 button.info:active{
-  font-size:20px;
+  font-size:36px;
+  box-shadow: 0 0 0 0;
+  background-color: black;
+}
+
+button.transpose:active{
+  font-size:36px;
   box-shadow: 0 0 0 0;
   background-color: black;
 }
