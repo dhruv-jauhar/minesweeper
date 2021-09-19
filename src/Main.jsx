@@ -1,6 +1,6 @@
 import './index.css';
 import React from "react"
-import { initialize, handleClick, hint, solve } from './functions';
+import { initialize, handleClick, hint, solve, transposeAll } from './functions';
 
 const NewGame = React.memo((props) => {
     const [showCustom, setShowCustom] = React.useState(true)
@@ -23,12 +23,8 @@ const NewGame = React.memo((props) => {
             let row=document.getElementById("rowno").value
             let mines=document.getElementById("bombno").value
             let cols=document.getElementById("colno").value
-            if (row>32) {
-                window.alert("Please limit rows to 32")
-                return;
-            }
-            if (cols>24) {
-                window.alert("Please limit columns to 24")
+            if (row>32 || cols>32) {
+                window.alert("Please limit rows and columns to 32")
                 return;
             }
             if (2.5*mines>row*cols) {
@@ -244,18 +240,18 @@ const Main = () => {
             doesClickOpen={doesClickOpen}
         />
         {isHovering && <div className="moreinfo">
-            Welcome to the last minesweeper you'll ever need! <br/><br/>
-            Using Artificial Intelligence, this game creates a random board that is guaranteed to be solvable,
-            so you'll never lose a game because of a 50-50 guess.<br/><br/>
+            Using Artificial Intelligence, this game creates a random board that is guaranteed to be solvable.
+            Never lose a game because of a 50-50 guess!<br/><br/>
             You can customize the game dimensions to your liking or use the international standard presets.
             The default is 10x10 with 15 mines. Remember: if you add too many mines, the AI might not find a solvable board.<br/><br/>
             Left click to open a box or right click to flag it. You may toggle this by clicking on the button on top.<br/><br/>
             Clicking on an open box will open all surrounding boxes if all the mines of the original box have been flagged.<br/><br/>
             The hint button will let you know if you've wrongly flagged any box, and if there's any unopened box that can be deduced to be either safe or have a mine.
-
+            <br/><br/> On the bottom right, you can change the board from vertical to horizontal based on your orientation.
 
         </div>}
         <button className="info" onMouseOver={()=>setIsHovering(true)} onMouseLeave={()=>setIsHovering(false)}>&#9432;</button>
+        <button className="transpose" onClick={()=>board.length && transposeAll(board, setBoard, boardState, setBoardState, rows, setRows, cols, setCols, hintState, setHintState)}>&#8634;</button>
     </div>
 }
 

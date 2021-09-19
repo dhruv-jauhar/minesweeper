@@ -221,9 +221,22 @@ export function initialize (rows, cols, props) {
     setTimeout(()=> props.setTime(0), 150)
 }
 
+function transpose(matrix) {
+    return matrix[0].map((col, c) => matrix.map((row, r) => matrix[r][c]));
+  }
+
+export function transposeAll (board, setBoard, boardState, setBoardState, rows, setRows, cols, setCols, hintState, setHintState) {
+    setBoard(transpose(board))
+    setBoardState(transpose(boardState))
+    setHintState(transpose(hintState))
+    setRows(cols)
+    setCols(rows)
+}
+ 
 export function hint (props) {
     if (props.time===0)
         return;
+    props.setHintCount(props.hintCount+1)
     let flag=0;
     let temp=props.hintState;
     for (var i=0; i<props.board.length; i++) {
@@ -282,7 +295,6 @@ export function hint (props) {
             }
         }
     }
-    props.setHintCount(props.hintCount+1)
     props.setHintState(temp)
 }
 

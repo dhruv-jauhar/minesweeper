@@ -124,11 +124,22 @@ button.info {
   width: 36px;
   border-radius: 100%;
   background-color: black;
-  font-size: 20px;
+  font-size: 36px;
   box-shadow: 0 0 0 0;
   position:absolute;
   bottom: 1rem;
   left: 1rem;
+}
+button.transpose {
+  height: 36px;
+  width: 36px;
+  border-radius: 100%;
+  background-color: black;
+  font-size: 36px;
+  box-shadow: 0 0 0 0;
+  position:absolute;
+  bottom: 1rem;
+  right: 1rem;
 }
 
 button.green:active {
